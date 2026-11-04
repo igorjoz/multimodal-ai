@@ -1,0 +1,14 @@
+# Archiwa i nagrania
+*.zip
+nagrania/
+Dane/
+
+# Jupyter i Python
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+
+# Środowiska lokalne
+.venv/
+venv/
+.env
