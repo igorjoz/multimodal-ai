@@ -1,0 +1,292 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage[mathscr]{euscript}
+\let\euscr\mathscr \let\mathscr\relax
+\usepackage[scr]{rsfso}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue,
+citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage{minted}
+\setminted{fontsize=\footnotesize, linenos, breaklines, frame=single}
+
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccot}{arccot}
+\DeclareMathOperator{\arccsc}{arccsc}
+\newcommand{\ddx}{\frac{d}{dx}}
+\newcommand{\dfdx}{\frac{df}{dx}}
+\newcommand{\ddxp}[1]{\frac{d}{dx}\left( #1 \right)}
+\newcommand{\dydx}{\frac{dy}{dx}}
+\let\ds\displaystyle
+\newcommand{\intx}[1]{\int #1 \, dx}
+\newcommand{\intt}[1]{\int #1 \, dt}
+\newcommand{\defint}[3]{\int_{#1}^{#2} #3 \, dx}
+\newcommand{\imp}{\Rightarrow}
+\newcommand{\un}{\cup}
+\newcommand{\inter}{\cap}
+\newcommand{\ps}{\mathscr{P}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newtheorem*{sol}{Solution}
+\newtheorem*{claim}{Claim}
+\newtheorem{problem}{Problem}
+\begin{document}
+
+\lhead{Laboratorium 5}
+\chead{Igor Józefowicz 193257 \\ Kamil Śliwiński 193740}
+\rhead{\today}
+\title{Uczenie głębokie -- Laboratorium 1 }
+\author{Igor Józefowicz 193257\and Kamil Śliwiński 193740}
+\maketitle
+%==================================================================================
+
+
+\section{zadanie 1}
+
+\begin{minted}[frame=lines, linenos, breaklines]{python}
+
+## Wynik dla jądra k1:
+[[-4.,  -6.,   4.],
+
+ [-20., -14.,  20.],
+
+ [-20., -10.,  20.]]
+ ## Wynik dla jądra k2:
+[[ 9.,  6., 16.],
+
+ [21., 27., 30.],
+
+ [14., 30., 27.]]
+ ## Wynik dla jądra k3:
+ [[  8.,  15.,   9.],
+
+ [  7.,   8.,   9.],
+
+ [ -8., -15.,  -9.]]
+
+\end{minted}
+
+
+
+\section{zadanie 2}
+
+
+\begin{minted}[frame=lines, linenos, breaklines]{python}
+
+import matplotlib.pyplot as plt
+import os
+
+kernels['k4'] =   np.array([
+                            [1., 0., 0.,0., 0.],
+                            [0., 1., 0.,0., 0.],
+                            [0., 0., 1.,0., 0.],
+                            [0., 0., 0.,1., 0.],
+                            [0., 0., 0.,0., 1.]
+                            ])
+
+
+
+image_path = 'lab1_1.jpg'
+if os.path.exists(image_path):
+    img_input = read_image(image_path, 200, 200)
+else:
+    print(f"Plik {image_path} nie został znaleziony! Używam losowego obrazu testowego.")
+    img_input = np.random.rand(200, 200, 1) * 255
+
+# Obliczenie wyników splotów
+out_k1 = apply_conv2d(img_input, kernels['k1'])
+out_k2 = apply_conv2d(img_input, kernels['k2'])
+out_k3 = apply_conv2d(img_input, kernels['k3'])
+out_k4 = apply_conv2d(img_input, kernels['k4'])
+
+# Wyświetlenie obrazów
+fig, axs = plt.subplots(1, 5, figsize=(15, 5))
+
+# Oryginalny obraz
+axs[0].imshow(img_input.squeeze(), cmap='gray')
+axs[0].set_title('Oryginalny obraz')
+axs[0].axis('off')
+
+# Wynik dla k1
+axs[1].imshow(out_k1[0, :, :, 0], cmap='gray')
+axs[1].set_title('Filtr k1 (pionowy)')
+axs[1].axis('off')
+
+# Wynik dla k2
+axs[2].imshow(out_k2[0, :, :, 0], cmap='gray')
+axs[2].set_title('Filtr k2 (wyostrzenie)')
+axs[2].axis('off')
+
+# Wynik dla k3
+axs[3].imshow(out_k3[0, :, :, 0], cmap='gray')
+axs[3].set_title('Filtr k3 (poziomy)')
+axs[3].axis('off')
+
+# Wynik dla k4
+axs[4].imshow(out_k4[0, :, :, 0], cmap='gray')
+axs[4].set_title('Filtr k4')
+axs[4].axis('off')
+
+plt.tight_layout()
+plt.show()
+
+\end{minted}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{p1.PNG}
+    \caption{}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{p2.PNG}
+    \caption{}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{p3.PNG}
+    \caption{}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{p4.PNG}
+    \caption{Kształt wejściowy obrazu: (200, 200, 1)
+Kształt wyjściowy po splotu ze strides=(2,2) i padding='VALID': (1, 99, 99, 1)}
+\end{figure}
+ Stride powoduje zmiane rozdzielczości przetarzanego obrazu natomiast padding ustawiony na 'VALID 'nie stosuje żadnego dopełnienia (obraz wyjściowy będzie mniejszy, ponieważ filtr nakłada się tylko tam, gdzie w pełni mieści się na obrazie)
+\section{zadanie 3}
+
+\textbf{Dane wejściowe:} \\
+Wymiar początkowy (krok 0): $24 \times 24 \times 1$ dla \texttt{input = np.ones((24, 24, 1))}
+
+\vspace{0.5cm}
+\textbf{Przebieg operacji:}
+
+\begin{enumerate}
+    \item \textbf{Splot (Conv2D):} 16 filtrów o rozmiarze $3 \times 3$, krok $(1,1)$, padding \texttt{SAME}
+    \begin{itemize}
+        \item \textbf{Kształt wyjściowy:} $24 \times 24 \times 16$
+    \end{itemize}
+
+    \item \textbf{Pooling:} jądro $5 \times 5$, krok $(3,3)$, padding \texttt{VALID}
+    \begin{itemize}
+        \item \textbf{Kształt wyjściowy:} $7 \times 7 \times 16$
+        \item \textit{Uwaga:} Wymiar przestrzenny wynosi $7 \times 7$, a nie $8 \times 8$, ponieważ padding \texttt{VALID} oznacza brak marginesów, co prowadzi do ucięcia pikseli niemieszczących się w pełnym oknie. Wynika to ze wzoru: 
+        $$W_{wyj} = \left\lfloor \frac{24 - 5}{3} \right\rfloor + 1 = 6 + 1 = 7$$
+    \end{itemize}
+
+    \item \textbf{Splot (Conv2D):} 32 filtry o rozmiarze $3 \times 3$, krok $(1,1)$, padding \texttt{SAME}
+    \begin{itemize}
+        \item \textbf{Kształt wyjściowy:} $7 \times 7 \times 32$
+    \end{itemize}
+
+    \item \textbf{Pooling:} jądro $3 \times 3$, krok $(2,2)$, padding \texttt{VALID}
+    \begin{itemize}
+        \item \textbf{Kształt wyjściowy:} $3 \times 3 \times 32$
+        \item \textit{Obliczenie:} 
+        $$W_{wyj} = \left\lfloor \frac{7 - 3}{2} \right\rfloor + 1 = 2 + 1 = 3$$
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+\textbf{Ostateczny wymiar macierzy:}
+$$3 \times 3 \times 32$$
+
+
+
+\section{zadanie 4}
+
+\subsection{zadanie 4a}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4a_model_summary.png}
+    \caption{}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4a_training_plot.png}
+    \caption{Wykres przedstawia proces treningu.}
+\end{figure}
+
+Wynik ewaluacji - dokładność (accuracy):  0.48170000314712524
+
+\subsection{zadanie 4b}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4b_model_summary.png}
+    \caption{}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4b_training_plot.png}
+    \caption{Wykres przedstawia proces treningu.}
+\end{figure}
+Wynik ewaluacji - dokładność (accuracy):  0.6442000269889832
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4b_example_images.png}
+    \caption{}
+\end{figure}
+
+Komentarz do wyników modelu z zadania 4a (prosty model) i zadania 4b - model rozbudowany o 1 dodatkową warstwę splotową i 2 dodatkowe max pooling 2d:
+
+Model 4a uzyskał dokładność ~48.2\%. Model 4b poprawił ten wynik o około 16\% osiągając dokładność 64.4\%, co jest zauważalną poprawą, ale wciąż nie jest zadowalającym wynikiem.
+
+\subsection{zadanie 4c}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{4c_example_image.png}
+    \caption{Przykładowe zdjęcie}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4c_heatmap_filter_5.png}
+    \caption{Mapa ciepła dla 3 kanałów - RGB - Red, Green, Blue}
+\end{figure}
+
+\subsection{zadanie 4d}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4d_model_summary.png}
+    \caption{}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{4d_training_plot.png}
+    \caption{Wykres przedstawia proces treningu.}
+\end{figure}
+Wynik ewaluacji - dokładność (accuracy):  0.7318000197410583 \\
+Model z zadania 4d został rozbudowany o trzecią warstwę splotową z 256 filtrami. Po tej trzeciej warstwie konwolucyjnej dodano jeszcze warstwę max pooling 2d.
+
+Model trenował się zauważalnie dłużej od poprzednich.
+
+W modelu z zadania 4d zdecydowanie widać overfitting. Dokładność na zbiorze treningowym wynosi ponad 95\%, natomiast na zbiorze testowym wynosi 73.1\%. Natomiast ten wynik 73.1\% wciąż jest lepszy od modeli 4a czy 4b.  
+
+
+
+\end{document}
