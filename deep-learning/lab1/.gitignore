@@ -1,0 +1,11 @@
+.venv/
+.uv-cache/
+.lab1-work/
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.jupyter/
+.ipython/
+.mplconfig/
+.keras/
+artifacts/
